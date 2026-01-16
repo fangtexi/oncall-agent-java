@@ -1,3 +1,8 @@
 spring:
   application:
     name: oncall-agent-java
+# 文档分片配置
+document:
+  chunk:
+    max-size: 800
+    overlap: 100
