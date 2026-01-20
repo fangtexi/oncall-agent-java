@@ -124,6 +124,7 @@ public class DocumentChunkService {
         List<String> paragraphs = splitByParagraphs(content);
 
         StringBuilder currentChunk = new StringBuilder();
+
         int currentStartIndex = section.startIndex;
         int chunkIndex = startChunkIndex;
 
