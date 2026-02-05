@@ -319,7 +319,7 @@ public class MdRagSplitter {
 
     /**
      * 【新增】列表切分：按单个列表项切分'（-/*数字.），保留列表项完整性
-    */
+     */
     private List<MdChunk> splitListByItem(String content, MdChunkType type, String docName,
                                           String parentId, int startLine, int endLine) {
         List<MdChunk> subChunks = new ArrayList<>();

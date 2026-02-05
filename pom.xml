@@ -32,19 +32,6 @@
 
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.ai</groupId>
-                <artifactId>spring-ai-bom</artifactId>
-                <version>${spring-ai.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-
     <!-- 第一步：配置项目本地仓库（阿里云+官方仓，优先级高于全局settings） -->
     <repositories>
         <!-- 官方中央仓兜底（阿里云拉取不到时自动使用） -->
@@ -59,6 +46,19 @@
             </snapshots>
         </repository>
     </repositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 
     <dependencies>
         <dependency>
@@ -104,23 +104,7 @@
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
         </dependency>
-        <!-- CommonMark 核心：MD AST解析 -->
-        <dependency>
-            <groupId>org.commonmark</groupId>
-            <artifactId>commonmark</artifactId>
-            <version>0.27.1</version>
-        </dependency>
-        <!-- CommonMark 扩展：支持表格、任务列表等MD扩展语法 -->
-        <dependency>
-            <groupId>org.commonmark</groupId>
-            <artifactId>commonmark-ext-gfm-tables</artifactId>
-            <version>0.27.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.commonmark</groupId>
-            <artifactId>commonmark-ext-task-list-items</artifactId>
-            <version>0.27.1</version>
-        </dependency>
+
         <!-- 工具类：IO读取、字符串处理 -->
         <dependency>
             <groupId>commons-io</groupId>
@@ -142,7 +126,6 @@
             <artifactId>dashscope-sdk-java</artifactId>
             <version>2.22.6</version>
         </dependency>
-
     </dependencies>
 
     <build>
