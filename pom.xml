@@ -45,6 +45,21 @@
     </dependencyManagement>
 
 
+    <!-- 第一步：配置项目本地仓库（阿里云+官方仓，优先级高于全局settings） -->
+    <repositories>
+        <!-- 官方中央仓兜底（阿里云拉取不到时自动使用） -->
+        <repository>
+            <id>maven-official</id>
+            <url>https://repo1.maven.org/maven2/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -89,14 +104,46 @@
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
         </dependency>
-    </dependencies>
+        <!-- CommonMark 核心：MD AST解析 -->
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark</artifactId>
+            <version>0.27.1</version>
+        </dependency>
+        <!-- CommonMark 扩展：支持表格、任务列表等MD扩展语法 -->
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark-ext-gfm-tables</artifactId>
+            <version>0.27.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark-ext-task-list-items</artifactId>
+            <version>0.27.1</version>
+        </dependency>
+        <!-- 工具类：IO读取、字符串处理 -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.15.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.14.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.milvus</groupId>
+            <artifactId>milvus-sdk-java</artifactId>
+            <version>2.6.13</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dashscope-sdk-java</artifactId>
+            <version>2.22.6</version>
+        </dependency>
 
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>https://repo.maven.apache.org/maven2</url>
-        </repository>
-    </repositories>
+    </dependencies>
 
     <build>
         <plugins>
