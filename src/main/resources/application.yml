@@ -6,3 +6,9 @@ document:
   chunk:
     max-size: 800
     overlap: 100
+
+dashscope:
+  api:
+    key: sk-084ed4bad9d540b2bfa49196c0362a5e
+  embedding:
+    model: text-embedding-v4

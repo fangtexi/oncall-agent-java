@@ -24,7 +24,6 @@ public class VectorIndexService {
     @Autowired
     private DocumentChunkService chunkService;
 
-
     public void indexSingleFile(String filePath) throws IOException {
         Path path = Paths.get(filePath).normalize();
         File file = path.toFile();
