@@ -54,7 +54,7 @@ public class MdRagSplitter {
     }
 
 
-    // 【新增】自定义最大/最小分块大小（灵活配置）
+    // 自定义最大/最小分块大小（灵活配置）
     public void setMaxChunkSize(int maxChunkSize) {
         this.maxChunkSize = maxChunkSize;
         if (this.maxChunkSize < this.minChunkSize) {
@@ -218,7 +218,7 @@ public class MdRagSplitter {
     }
 
     /**
-     * 【新增】核心方法：完成当前块生成，检查大小并执行语义化二次切分，最终添加到原子块列表
+     * 核心方法：完成当前块生成，检查大小并执行语义化二次切分，最终添加到原子块列表
      * 替代原有completeCurrentBlock，整合「块生成+大小检查+语义切分」
      */
     private void completeAndCheckChunk(List<MdChunk> atomicChunks, MdChunkType type, StringBuilder content,
@@ -284,7 +284,7 @@ public class MdRagSplitter {
     }
 
     /**
-     * 【新增】段落切分：按中文语义标点切分，优先在。！？；后拆分，保证句子完整
+     * 段落切分：按中文语义标点切分，优先在。！？；后拆分，保证句子完整
      */
     private List<MdChunk> splitParagraphBySemantic(String content, MdChunkType type, String docName,
                                                    String parentId, int startLine, int endLine) {
@@ -318,7 +318,7 @@ public class MdRagSplitter {
     }
 
     /**
-     * 【新增】列表切分：按单个列表项切分'（-/*数字.），保留列表项完整性
+     * 列表切分：按单个列表项切分'（-/*数字.），保留列表项完整性
      */
     private List<MdChunk> splitListByItem(String content, MdChunkType type, String docName,
                                           String parentId, int startLine, int endLine) {
@@ -365,7 +365,7 @@ public class MdRagSplitter {
     }
 
     /**
-     * 【新增】代码块切分：按代码行切分，保留单行代码完整性，避免语法错误
+     * 代码块切分：按代码行切分，保留单行代码完整性，避免语法错误
      */
     private List<MdChunk> splitCodeBlockByLine(String content, MdChunkType type, String docName,
                                                String parentId, int startLine, int endLine) {
@@ -390,7 +390,7 @@ public class MdRagSplitter {
     }
 
     /**
-     * 【新增】兜底切分：当语义单位仍超过阈值时，强制按字符数切分
+     * 兜底切分：当语义单位仍超过阈值时，强制按字符数切分
      */
     private List<MdChunk> splitByForceChar(String content, MdChunkType type, String docName,
                                            String parentId, int startLine, int endLine) {
@@ -504,7 +504,6 @@ public class MdRagSplitter {
         return aggregateChunks;
     }
 
-    // ---------------------- 原有工具方法，无修改 ----------------------
     /**
      * 判断是否为标题行，返回标题层级（1-6），非标题返回0
      */
