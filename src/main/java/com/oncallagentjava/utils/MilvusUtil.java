@@ -155,16 +155,16 @@ public class MilvusUtil {
      * @param chunks  细粒度原子块列表
      * @param vectors 向量列表，顺序与 chunks 完全一致
      */
-    public static void insertDataToMilvus(List<MdChunk> chunks, List<Float[]> vectors) {
+    public static void insertDataToMilvus(List<MdChunk> chunks, List<List<Float>> vectors) {
         if (chunks == null || chunks.isEmpty() || vectors == null || vectors.isEmpty() || chunks.size() != vectors.size()) {
             throw new IllegalArgumentException("原子块列表与向量列表长度必须一致！");
         }
         MilvusClientV2 client = getMilvusClient();
-        List<List<MdChunk>> bathChunks = splitBatch(chunks, VectorConfig.MILVUS_BATCH_SIZE);
-        List<List<Float[]>> bathVectors = splitBatch(vectors, VectorConfig.MILVUS_BATCH_SIZE);
+//        List<List<MdChunk>> bathChunks = splitBatch(chunks, VectorConfig.MILVUS_BATCH_SIZE);
+//        List<List<Float[]>> bathVectors = splitBatch(vectors, VectorConfig.MILVUS_BATCH_SIZE);
         for (int i = 0; i < chunks.size(); i++) {
             MdChunk chunk = chunks.get(i);
-            Float[] vector = vectors.get(i);
+            List<Float> vector = vectors.get(i);
             // 构造插入的数据行
             Map<String, Object> chunkMap = new HashMap<>();
             chunkMap.put("chunk_id", chunk.getChunkId());
@@ -198,7 +198,7 @@ public class MilvusUtil {
      * @param topK 返回最相似的k个结果
      * @return 相似块的元数据+相似度得分
      */
-    public static List<Map<String,Object>> searchSimilar(float[] queryVector,int topK) {
+    public static List<Map<String,Object>> searchSimilar(List<Float> queryVector,int topK) {
         MilvusClientV2 client = getMilvusClient();
         // 判断表是否加载
         loadCollection(VectorConfig.MILVUS_TABLE_NAME_1);
@@ -258,6 +258,4 @@ public class MilvusUtil {
             logger.info("Milvus表 {} 已加载到内存", tableName);
         }
     }
-
-
 }
