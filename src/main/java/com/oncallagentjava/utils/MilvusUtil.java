@@ -1,20 +1,29 @@
 package com.oncallagentjava.utils;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.oncallagentjava.config.VectorConfig;
+import com.oncallagentjava.entity.MdChunk;
 import com.oncallagentjava.services.VectorEmbeddingService;
+import io.milvus.param.dml.InsertParam;
 import io.milvus.v2.client.ConnectConfig;
 import io.milvus.v2.client.MilvusClientV2;
 import io.milvus.v2.common.DataType;
 import io.milvus.v2.common.IndexParam;
-import io.milvus.v2.service.collection.request.AddFieldReq;
-import io.milvus.v2.service.collection.request.CreateCollectionReq;
-import io.milvus.v2.service.collection.request.HasCollectionReq;
+import io.milvus.v2.service.collection.request.*;
 
+import io.milvus.v2.service.collection.response.GetCollectionStatsResp;
 import io.milvus.v2.service.index.request.CreateIndexReq;
+import io.milvus.v2.service.vector.request.InsertReq;
+import io.milvus.v2.service.vector.request.SearchReq;
+import io.milvus.v2.service.vector.request.data.FloatVec;
+import io.milvus.v2.service.vector.response.InsertResp;
+import io.milvus.v2.service.vector.response.SearchResp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
+import java.util.*;
 
 /**
  * milvus 向量数据库操作类
@@ -28,6 +37,7 @@ public class MilvusUtil {
 
     /**
      * 获取milvus客户端
+     *
      * @return
      */
     public static MilvusClientV2 getMilvusClient() {
@@ -61,7 +71,7 @@ public class MilvusUtil {
                 .build()
         );
         if (hasTable) {
-            logger.info("Milvus表 --> {}，已存在，无需重复创建",VectorConfig.MILVUS_TABLE_NAME_1);
+            logger.info("Milvus表 --> {}，已存在，无需重复创建", VectorConfig.MILVUS_TABLE_NAME_1);
             return;
         }
 
@@ -69,11 +79,11 @@ public class MilvusUtil {
         CreateCollectionReq.CollectionSchema collectionSchema = client.createSchema();
         // 主键：分片唯一ID
         collectionSchema.addField(AddFieldReq.builder()
-                        .fieldName("chunk_id")
-                        .dataType(DataType.VarChar)
-                        .maxLength(64)
-                        .isPrimaryKey(true)
-                        .autoID(false)
+                .fieldName("chunk_id")
+                .dataType(DataType.VarChar)
+                .maxLength(64)
+                .isPrimaryKey(true)
+                .autoID(false)
                 .build());
         // 父块ID
         collectionSchema.addField(AddFieldReq.builder()
@@ -120,10 +130,10 @@ public class MilvusUtil {
         CreateCollectionReq createCollectionReq = CreateCollectionReq.builder()
                 .collectionName(VectorConfig.MILVUS_TABLE_NAME_1)
                 .collectionSchema(collectionSchema)
-                .numShards(1) //1个分片
+                .numShards(1) // 1个分片
                 .build();
         client.createCollection(createCollectionReq);
-        logger.info("Milvus表 --> {}，创建成功",VectorConfig.MILVUS_TABLE_NAME_1);
+        logger.info("Milvus表 --> {}，创建成功", VectorConfig.MILVUS_TABLE_NAME_1);
         // 创建索引
         IndexParam indexParam = IndexParam.builder()
                 .fieldName("vector")
@@ -137,4 +147,5 @@ public class MilvusUtil {
         client.createIndex(createIndexReq);
         logger.info("Milvus索引创建成功，索引类型：{}",VectorConfig.MILVUS_INDEX_TYPE);
     }
+    
 }
