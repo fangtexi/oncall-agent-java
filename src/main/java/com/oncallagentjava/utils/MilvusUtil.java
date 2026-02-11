@@ -221,7 +221,7 @@ public class MilvusUtil {
                 data.put("similarity", res.getScore()); // 相似度得分（余弦相似度，越接近1越相似）
                 data.putAll(res.getEntity()); // 元数据（chunk_id/parent_chunk_id/content等）
                 result.add(data);
-                System.out.printf("ID: %d, Score: %f, %s\n", (long)res.getId(), res.getScore(), res.getEntity().toString());
+                System.out.printf("ID: %s, Score: %f, %s\n", res.getId(), res.getScore(), res.getEntity().toString());
             }
         }
 
