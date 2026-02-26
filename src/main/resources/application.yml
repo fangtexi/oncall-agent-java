@@ -1,6 +1,12 @@
 spring:
   application:
     name: oncall-agent-java
+  ai:
+    dashscope:
+      api-key: sk-084ed4bad9d540b2bfa49196c0362a5e
+      embedding:
+        options:
+          model: text-embedding-v4
 # 文档分片配置
 document:
   chunk:
@@ -12,3 +18,7 @@ dashscope:
     key: sk-084ed4bad9d540b2bfa49196c0362a5e
   embedding:
     model: text-embedding-v4
+
+# rag相关配置
+rag:
+  topK: 8

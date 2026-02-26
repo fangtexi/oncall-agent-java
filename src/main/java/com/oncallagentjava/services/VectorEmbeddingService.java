@@ -20,9 +20,9 @@ public class VectorEmbeddingService {
 
     private TextEmbedding textEmbedding;
 
-    @Value("${dashscope.api.key}")
+    @Value("${spring.ai.dashscope.api-key}")
     private String apiKey;
-    @Value("${dashscope.embedding.model}")
+    @Value("${spring.ai.dashscope.embedding.options.model}")
     private String model;
 
     @PostConstruct

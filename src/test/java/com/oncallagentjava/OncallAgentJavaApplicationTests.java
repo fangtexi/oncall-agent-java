@@ -40,7 +40,5 @@ class OncallAgentJavaApplicationTests {
                     + "，块类型：" + chunk.get("chunk_type")
                     + "，内容：" + chunk.get("content").toString().substring(0, 100) + "...");
         }
-
     }
-
 }
