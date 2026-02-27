@@ -43,7 +43,6 @@ public class ChatController {
             }
             // 获取或创建会话
             SessionInfo session = getOrCreateSession(request.getId());
-
             // 获取历史消息
             List<Map<String, String>> history = session.getHistory();
             logger.info("会话历史消息对数: {}", history.size() / 2);
@@ -62,7 +61,6 @@ public class ChatController {
                     request.getId(), session.getMessagePairCount());
 
             return ResponseEntity.ok(ApiResponse.success(ChatResponse.success(answer)));
-
         }catch (Exception e) {
             logger.error("对话失败", e);
             return ResponseEntity.ok(ApiResponse.success(ChatResponse.error(e.getMessage())));
@@ -145,5 +143,4 @@ public class ChatController {
         }
 
     }
-
 }

@@ -29,7 +29,6 @@ public class ChatService {
 
     /**
      * 创建DashScopeAgentApi 实例
-     *
      * @return
      */
     public DashScopeApi createDashScopeAgentApi() {
@@ -41,7 +40,6 @@ public class ChatService {
 
     /**
      * 创建标准参数的 chatModel 实例
-     *
      * @param dashScopeApi
      * @return
      */
@@ -59,7 +57,6 @@ public class ChatService {
 
     /**
      * 创建 chatModel 实例
-     *
      * @param dashScopeApi
      * @param temperature  控制随机性（0.0-1.0）
      * @param maxTokens    最大输出长度
@@ -80,7 +77,6 @@ public class ChatService {
 
     /**
      * 创建 ReactAgent
-     *
      * @param chatModel    模型
      * @param systemPrompt 系统提示词
      * @return
@@ -96,7 +92,6 @@ public class ChatService {
 
     /**
      * 执行 ReactAgent 对话（非流式）
-     *
      * @param agent    ReactAgent 实例
      * @param question 用户问题
      * @return AI 回复
@@ -111,7 +106,6 @@ public class ChatService {
 
     /**
      * 构建系统提示词（包含历史消息）
-     *
      * @param history 历史消息列表
      * @return 完整的系统提示词
      */
