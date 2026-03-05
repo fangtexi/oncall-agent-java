@@ -41,22 +41,23 @@ public class InternalDocsTools {
     public String queryInternalDocs(
             @ToolParam(description = "Search query describing what information you are looking for")
             String query) {
-        try {
-            // 使用向量搜索服务检索相关文档
-            List<Float> queryVector = vectorEmbeddingService.generateEmbedding(query);
-            List<Map<String, Object>> searchedSimilar = MilvusUtil.searchSimilar(queryVector, topK);
-
-            if (searchedSimilar.isEmpty()) {
-                return "{\"status\": \"no_results\", \"message\": \"No relevant documents found in the knowledge base.\"}";
-            }
-
-            // 将搜索结果转换为 JSON 格式
-            String resultJson = objectMapper.writeValueAsString(searchedSimilar);
-            return resultJson;
-        } catch (Exception e) {
-            logger.error("[工具错误] queryInternalDocs 执行失败", e);
-            return String.format("{\"status\": \"error\", \"message\": \"Failed to query internal docs: %s\"}",
-                    e.getMessage());
-        }
+        // try {
+        //     // 使用向量搜索服务检索相关文档
+        //     List<Float> queryVector = vectorEmbeddingService.generateEmbedding(query);
+        //     List<Map<String, Object>> searchedSimilar = MilvusUtil.searchSimilar(queryVector, topK);
+        //
+        //     if (searchedSimilar.isEmpty()) {
+        //         return "{\"status\": \"no_results\", \"message\": \"No relevant documents found in the knowledge base.\"}";
+        //     }
+        //
+        //     // 将搜索结果转换为 JSON 格式
+        //     String resultJson = objectMapper.writeValueAsString(searchedSimilar);
+        //     return resultJson;
+        // } catch (Exception e) {
+        //     logger.error("[工具错误] queryInternalDocs 执行失败", e);
+        //     return String.format("{\"status\": \"error\", \"message\": \"Failed to query internal docs: %s\"}",
+        //             e.getMessage());
+        // }
+        return null;
     }
 }

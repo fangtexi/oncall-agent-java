@@ -140,6 +140,12 @@
             <artifactId>dashscope-sdk-java</artifactId>
             <version>2.22.6</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark</artifactId>
+            <version>0.27.1</version>
+        </dependency>
     </dependencies>
 
     <build>
