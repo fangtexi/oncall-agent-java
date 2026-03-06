@@ -45,16 +45,24 @@ public class VectorIndexService {
         logger.info("=============== 粗粒度原子块数：{} 个 ===============",aggregateChunks.size());
         // 为每个分片生成向量
         logger.info("=============== 开始生成向量 ===============");
-        List<List<Float>> vectors = new ArrayList<>();
+        List<List<Float>> atomicVectors = new ArrayList<>();
+        List<List<Float>> aggregateVectors = new ArrayList<>();
+
         for (int i = 0;i < atomicChunks.size();i++) {
             List<Float> floatList = vectorEmbeddingService.generateEmbedding(atomicChunks.get(i).getContent());
-            vectors.add(floatList);
+            atomicVectors.add(floatList);
         }
-        logger.info("=============== 所有向量生成完毕，总向量数：{} ===============",vectors.size());
+        for (int i = 0;i < aggregateChunks.size();i++) {
+            List<Float> floatList = vectorEmbeddingService.generateEmbedding(aggregateChunks.get(i).getContent());
+            aggregateVectors.add(floatList);
+
+        }
+        logger.info("=============== 所有向量生成完毕，总向量数：{} ===============",atomicVectors.size() + aggregateVectors.size());
         // 插入向量到Milvus
         logger.info("=============== 开始插入向量到Milvus ===============");
         MilvusUtil.initMilvusTable();
-        MilvusUtil.insertDataToMilvus(atomicChunks,vectors);
-        logger.info("=============== 向量插入完毕，总数据条数为：{} ===============",atomicChunks.size());
+        MilvusUtil.insertDataToMilvus(atomicChunks,atomicVectors);
+        MilvusUtil.insertDataToMilvus(aggregateChunks,aggregateVectors);
+        logger.info("=============== 向量插入完毕，总数据条数为：{} ===============",atomicChunks.size() + aggregateChunks.size());
     }
 }

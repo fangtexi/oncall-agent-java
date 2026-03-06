@@ -20,9 +20,11 @@ import io.milvus.v2.service.collection.request.*;
 import io.milvus.v2.service.collection.response.GetCollectionStatsResp;
 import io.milvus.v2.service.index.request.CreateIndexReq;
 import io.milvus.v2.service.vector.request.InsertReq;
+import io.milvus.v2.service.vector.request.QueryReq;
 import io.milvus.v2.service.vector.request.SearchReq;
 import io.milvus.v2.service.vector.request.data.FloatVec;
 import io.milvus.v2.service.vector.response.InsertResp;
+import io.milvus.v2.service.vector.response.QueryResp;
 import io.milvus.v2.service.vector.response.SearchResp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -237,7 +239,7 @@ public class MilvusUtil {
     /**
      * 最优召回核心逻辑（复用原有，仅适配V2的SearchReq）
      */
-    public List<MdRecallChunk> optimalRecall(Float[] queryVector, String filterKeywords, int topK) {
+    public List<MdRecallChunk> optimalRecall(List<Float> queryVector, String filterKeywords, int topK) {
         // 1. 分层召回：原子块(100) + 聚合块(20)
         List<MdRecallChunk> atomicChunks = recallByCategory(queryVector, "ATOMIC", 100, filterKeywords);
         List<MdRecallChunk> aggregateChunks = recallByCategory(queryVector, "AGGREGATE", 20, filterKeywords);
@@ -270,13 +272,15 @@ public class MilvusUtil {
             if (parentChunkId == null || parentChunkId.isEmpty()) {
                 continue;
             }
-            // 获取父分块内容 todo
+            // 获取父分块内容
+            Map<String, Object> parentChunk = searchById(parentChunkId);
             String parentTitle = "";
             if (parentTitle != null) {
-                chunk.setParentTitleContent(parentTitle);
+                chunk.setParentTitleContent(parentChunk.get("content").toString());
             }
         }
     }
+
     /**
      * 计算加权得分（核心：多维度权重相乘）
      */
@@ -326,7 +330,7 @@ public class MilvusUtil {
      * @param filterKeywords
      * @return
      */
-    private List<MdRecallChunk> recallByCategory(Float[] queryVector, String category, int topN, String filterKeywords) {
+    private List<MdRecallChunk> recallByCategory(List<Float> queryVector, String category, int topN, String filterKeywords) {
         MilvusClientV2 client = getMilvusClient();
         // 构造过滤表达式
         StringBuilder filterExpr = new StringBuilder();
@@ -348,7 +352,7 @@ public class MilvusUtil {
                 .topK(topN)
                 .annsField("vector")
                 .filter(filterExpr.toString())
-                .data(List.of(new FloatVec(List.of(queryVector))))
+                .data(List.of(new FloatVec(queryVector)))
                 .outputFields(List.of( // 需要返回的字段
                         "chunk_id", "doc_name", "chunk_type", "title_level",
                         "parent_chunk_id", "content", "start_line", "end_line", "chunk_category"
@@ -404,7 +408,30 @@ public class MilvusUtil {
         }
     }
 
-    private String searchById() {
-        return null;
+    /**
+     * 查询指定id的数据
+     * @param id 唯一id
+     * @return
+     */
+    private Map<String, Object> searchById(String id) {
+        MilvusClientV2 client = getMilvusClient();
+
+        // 构造查询参数
+        QueryReq queryReq = QueryReq.builder()
+                .collectionName(VectorConfig.MILVUS_TABLE_NAME_1)
+                .filter("id == '" + id + "'")
+                .outputFields(List.of( // 需要返回的字段
+                        "chunk_id", "doc_name", "chunk_type", "title_level",
+                        "parent_chunk_id", "content", "start_line", "end_line", "chunk_category"
+                ))
+                .build();
+        // 执行查询
+        QueryResp queryResp = client.query(queryReq);
+        if (queryResp.getQueryResults() == null || queryResp.getQueryResults().isEmpty()) {
+            logger.error("Milvus 查询不到指定ID的数据：{}",id);
+            return null;
+        }
+        Map<String, Object> entity = queryResp.getQueryResults().get(0).getEntity();
+        return entity;
     }
 }
